@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/RevoloerO/vqm-countries-info/static/css/main.86c1aa4e.css",
+    "main.js": "/RevoloerO/vqm-countries-info/static/js/main.24077077.js",
+    "static/media/world-bg.jpg": "/RevoloerO/vqm-countries-info/static/media/world-bg.f4353076bf9d299751e9.jpg",
+    "index.html": "/RevoloerO/vqm-countries-info/index.html",
+    "main.86c1aa4e.css.map": "/RevoloerO/vqm-countries-info/static/css/main.86c1aa4e.css.map",
+    "main.24077077.js.map": "/RevoloerO/vqm-countries-info/static/js/main.24077077.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.86c1aa4e.css",
+    "static/js/main.24077077.js"
+  ]
+}
