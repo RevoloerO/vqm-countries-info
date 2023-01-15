@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/vqm-countries-info/static/css/main.06903fe4.css",
-    "main.js": "/vqm-countries-info/static/js/main.df3b81b6.js",
+    "main.css": "/vqm-countries-info/static/css/main.f5dc0256.css",
+    "main.js": "/vqm-countries-info/static/js/main.6cccf8b1.js",
     "static/media/world-bg.jpg": "/vqm-countries-info/static/media/world-bg.f4353076bf9d299751e9.jpg",
     "static/media/VQM-logo.png": "/vqm-countries-info/static/media/VQM-logo.9737edf0a90a2282ca66.png",
     "index.html": "/vqm-countries-info/index.html",
-    "main.06903fe4.css.map": "/vqm-countries-info/static/css/main.06903fe4.css.map",
-    "main.df3b81b6.js.map": "/vqm-countries-info/static/js/main.df3b81b6.js.map"
+    "main.f5dc0256.css.map": "/vqm-countries-info/static/css/main.f5dc0256.css.map",
+    "main.6cccf8b1.js.map": "/vqm-countries-info/static/js/main.6cccf8b1.js.map"
   },
   "entrypoints": [
-    "static/css/main.06903fe4.css",
-    "static/js/main.df3b81b6.js"
+    "static/css/main.f5dc0256.css",
+    "static/js/main.6cccf8b1.js"
   ]
 }
