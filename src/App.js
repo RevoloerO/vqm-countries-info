@@ -2,8 +2,11 @@ import {useState, useEffect, React} from 'react';
 import axios from 'axios';
 import { RiLightbulbFlashLine } from "react-icons/ri";
 import { HiLanguage} from "react-icons/hi2";
-import {HiSearchCircle} from "react-icons/hi"
-import { GiWorld } from 'react-icons/gi';
+import { GiWorld, GiFlatPlatform } from 'react-icons/gi';
+import { MdStars, MdNaturePeople} from 'react-icons/md';
+import {BsCurrencyExchange, BsClockFill} from 'react-icons/bs';
+import {IoIosPeople} from 'react-icons/io';
+import {FaMapMarkedAlt} from 'react-icons/fa';
 import VqmFooter from "./vqm-footer/vqm-footer";
 
 const api_key = process.env.REACT_APP_API_KEY
@@ -12,29 +15,22 @@ const api_key = process.env.REACT_APP_API_KEY
 const Country = ({countries, search, selectedCountry}) => {
     //if(search === '') return ""
     //console.log(selectedCountry)
+    //Initial Beginning Country for Panel
     if(selectedCountry.length ===0){
       const show =  countries.filter(country =>{
-        return country.name.common.toLowerCase().includes(('Germa').toLowerCase())
+        return country.name.official.toLowerCase().includes(('United States of America').toLowerCase())
       })
-      //if(!show[0].capital) console.log("hello")
-      if(show.length > 0) return <OneCountry country={show[0]}/>
+      if(show.length > 0) return <ShowCountry country={show[0]}/>
     }else{
-      return <OneCountry country={selectedCountry}/>
+      return <ShowCountry country={selectedCountry}/>
     }
-    /*
-    const show =  countries.filter(country =>{
-      return country.name.common.includes(search)
-    })
-    if(show.length > 10) return <p> Too many matches, specify another filter </p>
-    else if(show.length === 1) {
-
-      return <OneCountry country={show[0]}/>
-    }
-    else return show.map(country => <p>{country.name.common}</p> )*/
 }
+
 const SearchField = ({countries,setSelectedCountry,search,setSearch}) =>{
+    //Check search box for input
     if(search === '') return ""
 
+    //Filtering countries based on input
     let show =  countries.filter(country =>{
       return country.name.common.toLowerCase().includes(search.toLowerCase())
     })
@@ -43,15 +39,7 @@ const SearchField = ({countries,setSelectedCountry,search,setSearch}) =>{
       setSearch("")
       show = []
     }
-    //show.map(result => console.log(result.idd.suffixes))
-    /*return(<div className="results-box">
-      <ul> {show.map((result)=>(
-        <li key={result.name.common} onClick={() => selectCountry(result)}>
-          {result.name.common}
-        </li>))}
-      </ul>
-      </div>
-    )*/
+    //Return results for the selection
     return(<div className="results-box">
      {show.map((result)=>(
         <button key={result.name.common} onClick={() => {
@@ -64,14 +52,20 @@ const SearchField = ({countries,setSelectedCountry,search,setSearch}) =>{
     )
 
 }
-const OneCountry = ({country}) => {
+const Details = ({icon,title, info}) => (
+  <p> {icon} <u>{title}</u>: {info}</p>
+)
+const ShowCountry = ({country}) => {
 
   //console.log(country.currencies)
   const unit = 'metric' // unit can be metric or imperial
   const city = country.capital ? country.capital : 'No capital'
   const currencies = country.currencies ? country.currencies : {"NaN":{name:'No currency',symbol:'NaN'}}
-  const popDen = (country.population/country.area).toFixed(2)
+  const population = <>{country.population.toLocaleString('en-US')} ppl</>
+  const area =  <>{country.area.toLocaleString('en-US')} km<sup>2</sup></>
+  const popDen = <>{(country.population/country.area).toFixed(2)} p/km<sup>2</sup></>
   const languages = country.languages ? country.languages : {"NaN":"Not Available"}
+
 
   /*const [weathers, setWeathers] = useState([])
   const weatherHook = () =>{
@@ -100,30 +94,31 @@ const OneCountry = ({country}) => {
       <div className="countryTitle" >
         <img id="countryFLag" src={country.flags.png} alt="flag" />
         <div id="countryName">
-          <h1>{country.name.common} {country.flag} <img id="coatOfArms" src={country.coatOfArms.png} alt="" />
+          <h1> {country.name.common} {country.flag} <img id="coatOfArms" src={country.coatOfArms.png} alt="" />
           </h1>
-          <p> <b> {country.name.official}</b> | Capital: {city}</p>
+          <p> <b> {country.name.official}</b> </p>
+          <Details icon={<MdStars/>} title={"Capital"} info={city}/>
         </div>
       </div>
       <div className="countryDetail">
-        <h2><RiLightbulbFlashLine/> Insight</h2>
-        <p><GiWorld/> Region: {country.region} | {country.subregion} </p>
-        <div>Currency: {Object.keys(currencies).map(
+        <h1><RiLightbulbFlashLine/> Insights</h1>
+        <Details icon={<GiWorld/>} title={"Region"} info={`${country.region} | ${country.subregion}`}/>
+        <div><BsCurrencyExchange/> <u>Currency</u>: {Object.keys(currencies).map(
           key => <div key={key} style={{ display: 'inline-flex' }}>
             {currencies[key].name} ({currencies[key].symbol || ""})
             </div>)}
         </div>
-        <p>Population: {country.population.toLocaleString('en-US')} ppl</p>
-        <p>Area: {country.area.toLocaleString('en-US')} km<sup>2</sup></p>
-        <p>Population Density: {popDen} ppl/km<sup>2</sup></p>
-        <div>Time Zones: <ul>
+        <Details icon={<IoIosPeople/>} title={"Population"} info={population}/>
+        <Details icon={<GiFlatPlatform/>} title={"Area"} info = {area}/>
+        <Details icon={<MdNaturePeople/>} title={"Population Density"} info = {popDen}/>
+        <div> <BsClockFill/> <u>Time Zones</u>: <ul>
         {Object.keys(country.timezones).map(key => <li key={key}>{country.timezones[key]}</li>)}
         </ul></div>
-        <div> <HiLanguage/> Official Languages:
+        <div> <HiLanguage/> <u>Official Languages</u>:
         <ul>{Object.keys(languages).map(key =><li key = {key}>{languages[key]}</li>)}
         </ul></div>
-        <a href={country.maps.googleMaps} target="_blank" rel="noopener noreferrer">Google Maps</a> |
-        <a href={country.maps.openStreetMaps} target="_blank" rel="noopener noreferrer"> Terrirory</a>
+        <FaMapMarkedAlt/> <u>Maps</u>:
+        <a href={country.maps.googleMaps} target="_blank" rel="noopener noreferrer">Google Maps</a> | <a href={country.maps.openStreetMaps} target="_blank" rel="noopener noreferrer">Terrirory</a>
       </div>
     </div>
   )
@@ -152,7 +147,7 @@ const App = () => {
   return (
     <>
       <div className="search-box">
-        <button className="btn-search"> <HiSearchCircle/></button>
+
         <input
           className="input-search"
           value={search}

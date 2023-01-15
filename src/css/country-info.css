@@ -89,7 +89,27 @@ body{
 .countryDetail a, a:visited, a:hover, a:active {
   color: inherit;
 }
-@media (max-width: 767px) {
+
+@media (max-width: 600px) {
+  .countryShow{
+    margin: 5% 1%;
+  }
+  .countryTitle{
+    flex:1;
+    padding: 0;
+  }
+  .countryDetail{
+      margin: 0;
+  }
+  #countryFLag{
+    width: 90%;
+  }
+  #countryName{
+    padding: 0 0;
+    margin-right: 1%;
+  }
+}
+@media(min-width: 601px) and (max-width: 767px) {
   /* Styles for small screens */
   .countryShow{
     margin: 5% 5%;
@@ -102,9 +122,7 @@ body{
       margin: 0;
   }
 }
-@media (max-width: 767px){
 
-}
 @media (min-width: 768px)  and (max-width: 1024px) {
   /* Styles for tablets */
 
