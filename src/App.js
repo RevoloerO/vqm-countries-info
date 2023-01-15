@@ -4,6 +4,7 @@ import { RiLightbulbFlashLine } from "react-icons/ri";
 import { HiLanguage} from "react-icons/hi2";
 import {HiSearchCircle} from "react-icons/hi"
 import { GiWorld } from 'react-icons/gi';
+import VqmFooter from "./vqm-footer/vqm-footer";
 
 const api_key = process.env.REACT_APP_API_KEY
 //const api_key = '398973d201eba525ff5e0bd79960d119'
@@ -13,7 +14,7 @@ const Country = ({countries, search, selectedCountry}) => {
     //console.log(selectedCountry)
     if(selectedCountry.length ===0){
       const show =  countries.filter(country =>{
-        return country.name.common.includes('Germa')
+        return country.name.common.toLowerCase().includes(('Germa').toLowerCase())
       })
       //if(!show[0].capital) console.log("hello")
       if(show.length > 0) return <OneCountry country={show[0]}/>
@@ -34,22 +35,34 @@ const Country = ({countries, search, selectedCountry}) => {
 const SearchField = ({countries,setSelectedCountry,search,setSearch}) =>{
     if(search === '') return ""
 
-    const show =  countries.filter(country =>{
-      return country.name.common.includes(search)
+    let show =  countries.filter(country =>{
+      return country.name.common.toLowerCase().includes(search.toLowerCase())
     })
     const selectCountry = (result) =>{
       setSelectedCountry(result)
       setSearch("")
+      show = []
     }
     //show.map(result => console.log(result.idd.suffixes))
-    return(<div className="results-box">
+    /*return(<div className="results-box">
       <ul> {show.map((result)=>(
         <li key={result.name.common} onClick={() => selectCountry(result)}>
           {result.name.common}
         </li>))}
       </ul>
       </div>
+    )*/
+    return(<div className="results-box">
+     {show.map((result)=>(
+        <button key={result.name.common} onClick={() => {
+          console.log(result)
+          selectCountry(result)
+          }}>
+          {result.name.common}
+        </button>))}
+      </div>
     )
+
 }
 const OneCountry = ({country}) => {
 
@@ -58,6 +71,7 @@ const OneCountry = ({country}) => {
   const city = country.capital ? country.capital : 'No capital'
   const currencies = country.currencies ? country.currencies : {"NaN":{name:'No currency',symbol:'NaN'}}
   const popDen = (country.population/country.area).toFixed(2)
+  const languages = country.languages ? country.languages : {"NaN":"Not Available"}
 
   /*const [weathers, setWeathers] = useState([])
   const weatherHook = () =>{
@@ -106,7 +120,7 @@ const OneCountry = ({country}) => {
         {Object.keys(country.timezones).map(key => <li key={key}>{country.timezones[key]}</li>)}
         </ul></div>
         <div> <HiLanguage/> Official Languages:
-        <ul>{Object.keys(country.languages).map(key =><li key = {key}>{country.languages[key]}</li>)}
+        <ul>{Object.keys(languages).map(key =><li key = {key}>{languages[key]}</li>)}
         </ul></div>
         <a href={country.maps.googleMaps} target="_blank" rel="noopener noreferrer">Google Maps</a> |
         <a href={country.maps.openStreetMaps} target="_blank" rel="noopener noreferrer"> Terrirory</a>
@@ -135,14 +149,12 @@ const App = () => {
   const handleSearchChange = (event) =>{
     setSearch(event.target.value)
   }
-  const memoryUsage =  window.performance.memory;
-  console.log(memoryUsage);
   return (
     <>
       <div className="search-box">
         <button className="btn-search"> <HiSearchCircle/></button>
         <input
-          class="input-search"
+          className="input-search"
           value={search}
           onChange={handleSearchChange}
           placeholder="Type to Search..."
@@ -154,10 +166,11 @@ const App = () => {
           setSearch={setSearch}
           />
       </div>
-    <div className='countryShow'>
+      <div className='countryShow'>
 
-      <Country countries={countries}  search={search} selectedCountry={selectedCountry}/>
-    </div>
+        <Country countries={countries}  search={search} selectedCountry={selectedCountry}/>
+      </div>
+      <VqmFooter />
     </>
   )
 }

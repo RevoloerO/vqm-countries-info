@@ -6,6 +6,7 @@
 * constrast: rgba(197, 83, 0, 0.9) rgba(115, 255, 238, 0.6)
 */
 @import url('search-button.css');
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&family=Share+Tech+Mono&display=swap');
 :root {
   --bg-color-1: #0F1F52;
   --bg-color-2: #333335;
@@ -21,7 +22,6 @@ body{
   background-size: 100% auto;
   background-repeat: no-repeat;
   background-position: center 70px;
-  align-items: center;
 }
 .countryShow{
   /*box shape*/
@@ -35,7 +35,8 @@ body{
   position: relative;
   color: var(--theme-color-1);
   text-shadow: 3px 3px 5px var(--theme-color-5);
-  font-family: "Roboto", "Helvetica Neue", sans-serif;
+  font-family: 'Nanum Gothic Coding', monospace;
+  font-family: 'Share Tech Mono', monospace;
 
 }
 
@@ -97,11 +98,12 @@ body{
     flex:2;
     padding-bottom:0;
   }
-}
-@media (max-width: 767px){
   .countryDetail{
       margin: 0;
   }
+}
+@media (max-width: 767px){
+
 }
 @media (min-width: 768px)  and (max-width: 1024px) {
   /* Styles for tablets */

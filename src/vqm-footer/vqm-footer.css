@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&family=Share+Tech+Mono&display=swap');
+body{
+  margin-bottom: min(150px, 20%);
+}
+.footer{
+  width: 100%;
+  height:auto;
+  position: fixed;
+  left: 0 ; right: 0; bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  /*Text decorate*/
+  color: white;
+  text-align: center;
+  font-family: 'Nanum Gothic Coding', monospace;
+  font-family: 'Share Tech Mono', monospace;
+  padding: min(2%, 10px) 0;
+
+}
+.footer img{
+  border-radius: 50%;
+}
+@media (max-width: 1024px) {
+  /* Styles for small screens */
+  .footer{
+    display: flex;
+    justify-content: center;
+  }
+  .footer img{
+    width: 50px;
+  }
+  .brand{
+    width: auto;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+  }
+}
+@media (min-width: 1025px) {
+  .footer img{
+    width: 80px;
+  }
+}

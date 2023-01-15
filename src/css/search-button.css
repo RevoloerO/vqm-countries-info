@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&family=Share+Tech+Mono&display=swap');
 .search-box{
   width: fit-content;
   height: fit-content;
@@ -5,7 +6,8 @@
   margin: auto;
   top: 0;
   position: relative;
-
+  font-family: 'Nanum Gothic Coding', monospace;
+  font-family: 'Share Tech Mono', monospace;
 }
 .input-search{
   height: 50px;
@@ -16,7 +18,7 @@
   letter-spacing: 2px;
   outline: none;
   border-radius: 0;
-  transition: all .5s ease-in-out;
+  transition: all .5s ease-in;
   background-color:transparent;
   padding-right: 40px;
   color: transparent;
@@ -32,9 +34,12 @@
   border-radius: 50%;
   position: absolute;
   right: 0px;
-  color: rgba(115, 255, 238, 0.75) ;
+  color: rgba(119,136,153, 1) ;
   background-color: transparent;
   pointer-events: painted;
+}
+.btn-search:focus{
+  color: rgba(255,255,255, 1)
 }
 .btn-search:focus ~ .input-search{
   width: 300px;
@@ -60,15 +65,48 @@
 }
 .results-box{
   width: 100%;
-  background-color: white;
+  height: auto;
+  max-height: 300px;
+  overflow: auto;
+  background: linear-gradient(to top , rgba(174, 193, 255, 0.9),rgba(115, 255, 238, 1));
   cursor: pointer;
   position: absolute;
-  z-index: 2;
+  z-index: 9;
   visibility: hidden;
   transition: all 0.5s ease-in-out;
 }
 
+.results-box button{
+  width: 100%;
+  display: block;
+  padding: 15px 0;
+  background: transparent;
+  cursor: pointer;
+  border: none;
+  font-size: 20px;
+  transition-duration: .15s;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(.4,0,.2,1);
+}
+.results-box button:hover{
+    background: rgba(197, 83, 0, 1);
+    color: #ffffff ;
+}
+.results-box ul{
+  background-color: cyan;
+  list-style-type: none;
+  list-style-position: outside;
+}
+.results-box ul li{
+  z-index: 10;
+  padding: 0;
+  background-color: yellow;
+}
+.results-box ul li:hover{
+  cursor: pointer;
+}
+
 .btn-search:focus ~ .results-box,.input-search:focus ~ .results-box{
   visibility: visible;
-  transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in;
 }
