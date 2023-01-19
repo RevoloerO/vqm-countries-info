@@ -28,7 +28,7 @@ body{
   box-shadow: 10px 10px 15px 0px #0F0F0F;
 
   /*box position*/
-  margin: 3% 12%;
+  margin: 1% 12%;
   border-left: 5px solid rgba(255,255,255, 0.9);
   /*background: linear-gradient(to right top, rgba(174, 193, 255, 0.4), rgba(0, 34, 147,  0.4));*/
   background: linear-gradient(to bottom left , rgba(174, 193, 255, 0.01),rgba(115, 255, 238, 0.3));
@@ -40,17 +40,6 @@ body{
 
 }
 
-.searchBar{
-  width: auto;
-  background-color: yellow;
-  opacity: 1;
-  padding: 0;
-  margin: auto;
-  /*position*/
-  width: auto;
-  top: 0;
-  color:black;
-}
 .countryInfo{
   display: flex;
   flex-wrap: wrap;
@@ -92,7 +81,7 @@ body{
 
 @media (max-width: 600px) {
   .countryShow{
-    margin: 5% 1%;
+    margin: 5% .5%;
   }
   .countryTitle{
     flex:1;
@@ -102,7 +91,6 @@ body{
       margin: 0;
   }
   #countryFLag{
-    width: 90%;
   }
   #countryName{
     padding: 0 0;

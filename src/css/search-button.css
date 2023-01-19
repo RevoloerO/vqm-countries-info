@@ -44,7 +44,7 @@
   position: absolute;
   z-index: 9;
   visibility: hidden;
-  transition: all 0.5s ease-in-out;
+  transition: all 0.15s ease-in-out;
 }
 
 .results-box button{
@@ -79,5 +79,4 @@
 
 .input-search:focus ~ .results-box{
   visibility: visible;
-  transition: all 1.5s ease-in-out;
 }
