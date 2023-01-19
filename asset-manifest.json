@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/vqm-countries-info/static/css/main.ca761fa4.css",
-    "main.js": "/vqm-countries-info/static/js/main.e7d088c3.js",
+    "main.js": "/vqm-countries-info/static/js/main.3e7c6818.js",
     "static/media/world-bg.jpg": "/vqm-countries-info/static/media/world-bg.f4353076bf9d299751e9.jpg",
     "static/media/VQM-logo.png": "/vqm-countries-info/static/media/VQM-logo.9737edf0a90a2282ca66.png",
     "index.html": "/vqm-countries-info/index.html",
     "main.ca761fa4.css.map": "/vqm-countries-info/static/css/main.ca761fa4.css.map",
-    "main.e7d088c3.js.map": "/vqm-countries-info/static/js/main.e7d088c3.js.map"
+    "main.3e7c6818.js.map": "/vqm-countries-info/static/js/main.3e7c6818.js.map"
   },
   "entrypoints": [
     "static/css/main.ca761fa4.css",
-    "static/js/main.e7d088c3.js"
+    "static/js/main.3e7c6818.js"
   ]
 }
