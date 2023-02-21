@@ -9,7 +9,7 @@ import {IoIosPeople} from 'react-icons/io';
 import {FaMapMarkedAlt} from 'react-icons/fa';
 import VqmFooter from "./vqm-footer/vqm-footer";
 
-const api_key = process.env.REACT_APP_API_KEY
+//const api_key = process.env.REACT_APP_API_KEY
 //const api_key = '398973d201eba525ff5e0bd79960d119'
 
 const Country = ({countries, search, selectedCountry}) => {
@@ -58,7 +58,7 @@ const Details = ({icon,title, info}) => (
 const ShowCountry = ({country}) => {
 
   //console.log(country.currencies)
-  const unit = 'metric' // unit can be metric or imperial
+  //const unit = 'metric' // unit can be metric or imperial
   const city = country.capital ? country.capital : 'No capital'
   const currencies = country.currencies ? country.currencies : {"NaN":{name:'No currency',symbol:'NaN'}}
   const population = <>{country.population.toLocaleString('en-US')} ppl</>
