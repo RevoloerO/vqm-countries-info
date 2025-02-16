@@ -26,7 +26,7 @@ body{
     justify-content: center;
   }
   .footer img{
-    width: 50px;
+    width: 30px;
   }
   .brand{
     width: auto;
@@ -37,6 +37,6 @@ body{
 }
 @media (min-width: 1025px) {
   .footer img{
-    width: 80px;
+    width: 50px;
   }
 }

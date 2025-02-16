@@ -6,6 +6,7 @@ import { HiLanguage} from "react-icons/hi2";
 import { GiWorld, GiFlatPlatform } from 'react-icons/gi';
 import { MdStars, MdNaturePeople} from 'react-icons/md';
 import {BsCurrencyExchange, BsClockFill} from 'react-icons/bs';
+import { TbWorldCog } from "react-icons/tb";
 import {IoIosPeople} from 'react-icons/io';
 import {FaMapMarkedAlt} from 'react-icons/fa';
 import VqmFooter from "./vqm-footer/vqm-footer";
@@ -58,6 +59,7 @@ const ShowCountry = ({country}) => {
 //console.log(country.currencies)
 //const unit = 'metric' // unit can be metric or imperial
 const city = country.capital ? country.capital : 'No capital'
+const nativeName = country.name.nativeName ? Object.values(country.name.nativeName)[0].common : 'No native name';
 const currencies = country.currencies ? country.currencies : {"NaN":{name:'No currency',symbol:'NaN'}}
 const population = <>{country.population.toLocaleString('en-US')} ppl</>
 const area =  <>{country.area.toLocaleString('en-US')} km<sup>2</sup></>
@@ -96,6 +98,7 @@ return(
         </h1>
         <p> <b> {country.name.official}</b> </p>
         <Details icon={<MdStars/>} title={"Capital"} info={city}/>
+        <Details icon={<TbWorldCog />} title={"Native Name"} info={nativeName}/>
       </div>
     </div>
     <div className="countryDetail">
