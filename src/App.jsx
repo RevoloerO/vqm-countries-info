@@ -75,6 +75,53 @@ const Details = ({icon,title, info}) => (
     <span style={{flex: 1, display: 'inline-block'}}>{info}</span>
   </div>
 )
+const CollapsibleSection = ({icon, title, children, defaultOpen = false}) => {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div style={{marginBottom: '0.3em'}}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          cursor: 'pointer',
+          userSelect: 'none',
+          color: 'var(--theme-color-2)',
+          fontSize: '1.12rem',
+          gap: '0.7em'
+        }}
+        onClick={() => setOpen(o => !o)}
+        aria-expanded={open}
+      >
+        <span style={{
+          fontSize: '1.35em',
+          marginRight: '0.3em',
+          color: 'var(--theme-color-3)',
+          flexShrink: 0
+        }}>{icon}</span>
+        <span style={{
+          fontWeight: 700,
+          marginRight: '0.3em',
+          color: 'var(--theme-color-1)'
+        }}>
+          <u>{title}</u>:
+        </span>
+        <span style={{
+          marginLeft: 'auto',
+          fontSize: '1.1em',
+          color: 'var(--theme-color-3)'
+        }}>
+          {open ? '▼' : '▶'}
+        </span>
+      </div>
+      {open && (
+        <div style={{marginLeft: '2.5em', marginTop: '0.2em'}}>
+          {children}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const ShowCountry = ({country}) => {
 
 //console.log(country.currencies)
@@ -178,66 +225,58 @@ return(
       <Details icon={<IoIosPeople/>} title={"Population"} info={population}/>
       <Details icon={<GiFlatPlatform/>} title={"Area"} info = {area}/>
       <Details icon={<MdNaturePeople/>} title={"Population Density"} info = {popDen}/>
-      <div style={{
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: '0.7em',
-        marginBottom: '0.3em',
-        fontSize: '1.12rem',
-        color: 'var(--theme-color-2)'
-      }}>
-        <span style={{
-          fontSize: '1.35em',
-          marginRight: '0.3em',
-          color: 'var(--theme-color-3)',
-          flexShrink: 0
-        }}><BsClockFill/></span>
-        <span style={{
-          fontWeight: 700,
-          marginRight: '0.3em',
-          color: 'var(--theme-color-1)'
-        }}><u>Time Zones</u>:</span>
-        <span style={{flex: 1, display: 'inline-block'}}>
-          <ul style={{
-            margin: '0.2em 0 0 0.7em',
-            padding: 0,
-            listStyle: 'disc inside',
-            fontSize: '1em'
-          }}>
-            {Object.keys(country.timezones).map(key => <li key={key}>{country.timezones[key]}</li>)}
-          </ul>
-        </span>
-      </div>
-      <div style={{
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: '0.7em',
-        marginBottom: '0.3em',
-        fontSize: '1.12rem',
-        color: 'var(--theme-color-2)'
-      }}>
-        <span style={{
-          fontSize: '1.35em',
-          marginRight: '0.3em',
-          color: 'var(--theme-color-3)',
-          flexShrink: 0
-        }}><HiLanguage/></span>
-        <span style={{
-          fontWeight: 700,
-          marginRight: '0.3em',
-          color: 'var(--theme-color-1)'
-        }}><u>Official Languages</u>:</span>
-        <span style={{flex: 1, display: 'inline-block'}}>
-          <ul style={{
-            margin: '0.2em 0 0 0.7em',
-            padding: 0,
-            listStyle: 'disc inside',
-            fontSize: '1em'
-          }}>
-            {Object.keys(languages).map(key =><li key = {key}>{languages[key]}</li>)}
-          </ul>
-        </span>
-      </div>
+      <CollapsibleSection icon={<BsClockFill/>} title="Time Zones" defaultOpen={false}>
+        <ul style={{
+          margin: 0,
+          padding: 0,
+          listStyle: 'none',
+          fontSize: '1em'
+        }}>
+          {country.timezones && country.timezones.length > 0
+            ? country.timezones.map((tz, idx) =>
+              <li key={tz} style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginBottom: '0.15em'
+              }}>
+                <span style={{
+                  color: 'var(--theme-color-3)',
+                  marginRight: '0.5em',
+                  fontSize: '1.1em'
+                }}>•</span>
+                <span>{tz}</span>
+              </li>
+            )
+            : <li>Not Available</li>
+          }
+        </ul>
+      </CollapsibleSection>
+      <CollapsibleSection icon={<HiLanguage/>} title="Official Languages" defaultOpen={false}>
+        <ul style={{
+          margin: 0,
+          padding: 0,
+          listStyle: 'none',
+          fontSize: '1em'
+        }}>
+          {Object.keys(languages).length > 0
+            ? Object.keys(languages).map(key =>
+              <li key={key} style={{
+                display: 'flex',
+                alignItems: 'center',
+                marginBottom: '0.15em'
+              }}>
+                <span style={{
+                  color: 'var(--theme-color-3)',
+                  marginRight: '0.5em',
+                  fontSize: '1.1em'
+                }}>•</span>
+                <span>{languages[key]}</span>
+              </li>
+            )
+            : <li>Not Available</li>
+          }
+        </ul>
+      </CollapsibleSection>
       <div style={{
         display: 'flex',
         alignItems: 'flex-start',
