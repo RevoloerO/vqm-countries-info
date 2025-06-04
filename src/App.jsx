@@ -128,14 +128,34 @@ const App = () => {
   const [countries, setCountries] = useState([])
   const [search, setSearch] = useState('')
   const [selectedCountry, setSelectedCountry] = useState([])
+
   //effect hook to parse data from https://restcountries.com/v3.1/all source
-  const countriesHook = () =>{
-    //console.log('effect')
-    axios
-      .get('https://restcountries.com/v3.1/all')
-      .then(response =>{
-        setCountries(response.data)
-      })
+  const countriesHook = () => {
+    // First API call: first 10 fields
+    const url1 = 'https://restcountries.com/v3.1/all?fields=name,flags,coatOfArms,capital,region,subregion,currencies,population,area,languages';
+    // Second API call: remaining fields
+    const url2 = 'https://restcountries.com/v3.1/all?fields=name,timezones,maps';
+
+    Promise.all([axios.get(url1), axios.get(url2)]).then(([res1, res2]) => {
+      // Merge by country name (official)
+      const data1 = res1.data;
+      const data2 = res2.data;
+      // Create a map for fast lookup
+      const map2 = {};
+      data2.forEach(c => {
+        map2[c.name.official] = c;
+      });
+      // Merge fields from both responses
+      const merged = data1.map(c => {
+        const c2 = map2[c.name.official] || {};
+        return {
+          ...c,
+          timezones: c2.timezones,
+          maps: c2.maps
+        };
+      });
+      setCountries(merged);
+    });
   }
   useEffect(countriesHook, [])
 
