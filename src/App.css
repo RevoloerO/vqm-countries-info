@@ -8,21 +8,37 @@
 @import url('search-button.css');
 @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic+Coding&family=Share+Tech+Mono&display=swap');
 :root {
-  --bg-color-1: #181c31;
-  --bg-color-2: #232946;
-  --theme-color-1: #eebbc3;
-  --theme-color-2: #b8c1ec;
-  --theme-color-3: #a3ffd6;
-  --theme-color-4: #232946;
-  --theme-color-5: #121629;
-  --glass-bg: rgba(35, 41, 70, 0.65);
-  --glass-border: rgba(174, 193, 255, 0.22);
-  --accent-gradient: linear-gradient(135deg, #a3ffd6 0%, #eebbc3 100%);
+  --bg-color-1: #b2d8df;
+  --bg-color-2: #e6f0f3;
+  --theme-color-1: #2d4e6e;
+  --theme-color-2: #23404e;
+  --theme-color-3: #7c1e2b; /* Deep maroon for outstanding highlights */
+  --theme-color-4: #e6f0f3;
+  --theme-color-5: #1a2a33;
+  --glass-bg: rgba(255,255,255,0.55);
+  --glass-border: rgba(45, 78, 110, 0.18);
+  --accent-gradient: linear-gradient(135deg, #7c1e2b 0%, #1a2a33 70%);
+}
+
+/* Make all text much darker for readability */
+body,
+.countryShow,
+.countryInfo,
+.countryTitle,
+#countryName,
+.countryDetail,
+.countryDetail h1,
+.countryDetail a,
+.countryDetail a:visited,
+.countryDetail a:hover,
+.countryDetail a:active {
+  color: #1a2a33 !important; /* Deep navy for max contrast */
+  text-shadow: none !important;
 }
 
 body {
   background-color: var(--bg-color-1);
-  background-image: url('assets/world-bg.jpg');
+  background-image: url('assets/world-bg.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center 70px;

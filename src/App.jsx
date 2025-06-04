@@ -297,7 +297,7 @@ return(
           color: 'var(--theme-color-1)'
         }}><u>Maps</u>:</span>
         <span style={{flex: 1, display: 'inline-block'}}>
-          <a href={country.maps.googleMaps} target="_blank" rel="noopener noreferrer">Google Maps</a> | <a href={country.maps.openStreetMaps} target="_blank" rel="noopener noreferrer">Terrirory</a>
+          <a href={country.maps.googleMaps} target="_blank" rel="noopener noreferrer" className="map-link">Google Maps</a> | <a href={country.maps.openStreetMaps} target="_blank" rel="noopener noreferrer" className="map-link">Terrirory</a>
         </span>
       </div>
     </div>

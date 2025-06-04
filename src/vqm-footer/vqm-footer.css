@@ -14,15 +14,38 @@ body{
   font-family: 'Nanum Gothic Coding', monospace;
   font-family: 'Share Tech Mono', monospace;
   padding: min(2%, 10px) 0;
-
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .footer img{
   border-radius: 50%;
+}
+.social-links {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-top: 0.5em;
+}
+.map-link {
+  transition: color 0.2s, text-shadow 0.2s;
+  color: var(--theme-color-3, #ffd700);
+  text-decoration: underline;
+  font-weight: 600;
+  position: relative;
+}
+.map-link:hover, .map-link:focus {
+  color: var(--theme-color-1, #fff);
+  text-shadow: 0 2px 8px var(--theme-color-3, #ffd700);
+  outline: none;
 }
 @media (max-width: 1024px) {
   /* Styles for small screens */
   .footer{
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
   }
   .footer img{
