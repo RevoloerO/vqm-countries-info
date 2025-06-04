@@ -52,7 +52,28 @@ const SearchField = ({countries,setSelectedCountry,search,setSearch}) =>{
 
 }
 const Details = ({icon,title, info}) => (
-<p> {icon} <u>{title}</u>: {info}</p>
+  <div style={{
+    display: 'flex',
+    alignItems: 'flex-start',
+    gap: '0.7em',
+    marginBottom: '0.3em',
+    fontSize: '1.12rem',
+    lineHeight: 1.6,
+    color: 'var(--theme-color-2)'
+  }}>
+    <span style={{
+      fontSize: '1.35em',
+      marginRight: '0.3em',
+      color: 'var(--theme-color-3)',
+      flexShrink: 0
+    }}>{icon}</span>
+    <span style={{
+      fontWeight: 700,
+      marginRight: '0.3em',
+      color: 'var(--theme-color-1)'
+    }}><u>{title}</u>:</span>
+    <span style={{flex: 1, display: 'inline-block'}}>{info}</span>
+  </div>
 )
 const ShowCountry = ({country}) => {
 
@@ -91,12 +112,24 @@ useEffect(weatherHook, [])*/
 */
 return(
   <div className="countryInfo">
-    <div className="countryTitle" >
+    <div className="countryTitle">
       <img id="countryFLag" src={country.flags.png} alt="flag" />
       <div id="countryName">
-        <h1> {country.name.common} {country.flag} <img id="coatOfArms" src={country.coatOfArms.png} alt="" />
+        <h1>
+          {country.name.common}
+          <span style={{
+            fontSize: '2.3rem',
+            marginLeft: '0.4rem',
+            filter: 'drop-shadow(0 2px 8px var(--theme-color-3))'
+          }}>{country.flag}</span>
+          <img id="coatOfArms" src={country.coatOfArms.png} alt="" />
         </h1>
-        <p> <b> {country.name.official}</b> </p>
+        <p style={{
+          color: 'var(--theme-color-2)',
+          fontWeight: 600,
+          fontSize: '1.1rem',
+          margin: '0.5em 0 1.1em 0'
+        }}><b>{country.name.official}</b></p>
         <Details icon={<MdStars/>} title={"Capital"} info={city}/>
         <Details icon={<TbWorldCog />} title={"Native Name"} info={nativeName}/>
       </div>
@@ -104,22 +137,130 @@ return(
     <div className="countryDetail">
       <h1><RiLightbulbFlashLine/> Insights</h1>
       <Details icon={<GiWorld/>} title={"Region"} info={`${country.region} | ${country.subregion}`}/>
-      <div><BsCurrencyExchange/> <u>Currency</u>: {Object.keys(currencies).map(
-        key => <div key={key} style={{ display: 'inline-flex' }}>
-          {currencies[key].name} ({currencies[key].symbol || ""})
-          </div>)}
+      <div style={{
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: '0.7em',
+        marginBottom: '0.3em',
+        fontSize: '1.12rem',
+        color: 'var(--theme-color-2)'
+      }}>
+        <span style={{
+          fontSize: '1.35em',
+          marginRight: '0.3em',
+          color: 'var(--theme-color-3)',
+          flexShrink: 0
+        }}><BsCurrencyExchange/></span>
+        <span style={{
+          fontWeight: 700,
+          marginRight: '0.3em',
+          color: 'var(--theme-color-1)'
+        }}><u>Currency</u>:</span>
+        <span style={{flex: 1, display: 'inline-block'}}>
+          {Object.keys(currencies).map(
+            key => <span key={key} style={{
+              background: 'var(--theme-color-4)',
+              borderRadius: '10px',
+              padding: '0.18em 0.8em',
+              marginRight: '0.5em',
+              fontSize: '1em',
+              display: 'inline-block',
+              color: 'var(--theme-color-3)',
+              border: '1.5px solid var(--theme-color-3)',
+              fontWeight: 600,
+              boxShadow: '0 1px 6px 0 var(--theme-color-5)'
+            }}>
+              {currencies[key].name} ({currencies[key].symbol || ""})
+            </span>
+          )}
+        </span>
       </div>
       <Details icon={<IoIosPeople/>} title={"Population"} info={population}/>
       <Details icon={<GiFlatPlatform/>} title={"Area"} info = {area}/>
       <Details icon={<MdNaturePeople/>} title={"Population Density"} info = {popDen}/>
-      <div> <BsClockFill/> <u>Time Zones</u>: <ul>
-      {Object.keys(country.timezones).map(key => <li key={key}>{country.timezones[key]}</li>)}
-      </ul></div>
-      <div> <HiLanguage/> <u>Official Languages</u>:
-      <ul>{Object.keys(languages).map(key =><li key = {key}>{languages[key]}</li>)}
-      </ul></div>
-      <FaMapMarkedAlt/> <u>Maps</u>:
-      <a href={country.maps.googleMaps} target="_blank" rel="noopener noreferrer">Google Maps</a> | <a href={country.maps.openStreetMaps} target="_blank" rel="noopener noreferrer">Terrirory</a>
+      <div style={{
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: '0.7em',
+        marginBottom: '0.3em',
+        fontSize: '1.12rem',
+        color: 'var(--theme-color-2)'
+      }}>
+        <span style={{
+          fontSize: '1.35em',
+          marginRight: '0.3em',
+          color: 'var(--theme-color-3)',
+          flexShrink: 0
+        }}><BsClockFill/></span>
+        <span style={{
+          fontWeight: 700,
+          marginRight: '0.3em',
+          color: 'var(--theme-color-1)'
+        }}><u>Time Zones</u>:</span>
+        <span style={{flex: 1, display: 'inline-block'}}>
+          <ul style={{
+            margin: '0.2em 0 0 0.7em',
+            padding: 0,
+            listStyle: 'disc inside',
+            fontSize: '1em'
+          }}>
+            {Object.keys(country.timezones).map(key => <li key={key}>{country.timezones[key]}</li>)}
+          </ul>
+        </span>
+      </div>
+      <div style={{
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: '0.7em',
+        marginBottom: '0.3em',
+        fontSize: '1.12rem',
+        color: 'var(--theme-color-2)'
+      }}>
+        <span style={{
+          fontSize: '1.35em',
+          marginRight: '0.3em',
+          color: 'var(--theme-color-3)',
+          flexShrink: 0
+        }}><HiLanguage/></span>
+        <span style={{
+          fontWeight: 700,
+          marginRight: '0.3em',
+          color: 'var(--theme-color-1)'
+        }}><u>Official Languages</u>:</span>
+        <span style={{flex: 1, display: 'inline-block'}}>
+          <ul style={{
+            margin: '0.2em 0 0 0.7em',
+            padding: 0,
+            listStyle: 'disc inside',
+            fontSize: '1em'
+          }}>
+            {Object.keys(languages).map(key =><li key = {key}>{languages[key]}</li>)}
+          </ul>
+        </span>
+      </div>
+      <div style={{
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: '0.7em',
+        marginBottom: '0.3em',
+        fontSize: '1.12rem',
+        color: 'var(--theme-color-2)'
+      }}>
+        <span style={{
+          fontSize: '1.35em',
+          marginRight: '0.3em',
+          color: 'var(--theme-color-3)',
+          flexShrink: 0
+        }}><FaMapMarkedAlt/></span>
+        <span style={{
+          fontWeight: 700,
+          marginRight: '0.3em',
+          color: 'var(--theme-color-1)'
+        }}><u>Maps</u>:</span>
+        <span style={{flex: 1, display: 'inline-block'}}>
+          <a href={country.maps.googleMaps} target="_blank" rel="noopener noreferrer">Google Maps</a> | <a href={country.maps.openStreetMaps} target="_blank" rel="noopener noreferrer">Terrirory</a>
+        </span>
+      </div>
     </div>
   </div>
 )
