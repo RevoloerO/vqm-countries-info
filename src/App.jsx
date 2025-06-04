@@ -11,6 +11,16 @@ import {IoIosPeople} from 'react-icons/io';
 import {FaMapMarkedAlt} from 'react-icons/fa';
 import VqmFooter from "./vqm-footer/vqm-footer";
 
+const ThemeToggle = ({theme, setTheme}) => (
+  <button
+    className="theme-toggle-btn"
+    onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+    aria-label="Toggle theme"
+  >
+    {theme === 'light' ? '🌙 Dark Mode' : '☀️ Light Mode'}
+  </button>
+);
+
 const Country = ({countries, search, selectedCountry}) => {
   //if(search === '') return ""
   //console.log(selectedCountry)
@@ -308,6 +318,17 @@ const App = () => {
   const [countries, setCountries] = useState([])
   const [search, setSearch] = useState('')
   const [selectedCountry, setSelectedCountry] = useState([])
+  const [theme, setTheme] = useState('light');
+
+  // Apply theme to <body> and background image
+  useEffect(() => {
+    document.body.classList.toggle('dark-theme', theme === 'dark');
+    document.body.classList.toggle('light-theme', theme === 'light');
+    document.body.style.backgroundImage =
+      theme === 'dark'
+        ? "url('assets/world-bg-dark.png')"
+        : "url('assets/world-bg.png')";
+  }, [theme]);
 
   //effect hook to parse data from https://restcountries.com/v3.1/all source
   const countriesHook = () => {
@@ -345,24 +366,28 @@ const App = () => {
   }
   return (
     <>
-      <div className="search-box">
-
-        <input
-          className="input-search"
-          value={search}
-          onChange={handleSearchChange}
-          placeholder="Type to Search..."
-          />
-        <SearchField
-          countries={countries}
-          setSelectedCountry={setSelectedCountry}
-          search={search}
-          setSearch={setSearch}
-          />
-      </div>
       <div className='countryShow'>
-
-        <Country countries={countries}  search={search} selectedCountry={selectedCountry}/>
+        <div className="theme-search-row">
+          
+          <div className="search-box">
+            <input
+              className="input-search"
+              value={search}
+              onChange={handleSearchChange}
+              placeholder="Type to Search..."
+            />
+            <SearchField
+              countries={countries}
+              setSelectedCountry={setSelectedCountry}
+              search={search}
+              setSearch={setSearch}
+            />
+          </div>
+          <div className="theme-toggle-container">
+            <ThemeToggle theme={theme} setTheme={setTheme} />
+          </div>
+        </div>
+        <Country countries={countries} search={search} selectedCountry={selectedCountry}/>
       </div>
       <VqmFooter />
     </>
