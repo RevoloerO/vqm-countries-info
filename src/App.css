@@ -153,6 +153,7 @@ body,
   background: rgba(255,255,255,0.04);
   box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
   padding: 0;
+  flex-direction: column;
 }
 
 .countryTitle {
@@ -377,5 +378,10 @@ body,
   .countryShow {
     max-width: 1100px;
     margin: 3% auto;
+  }
+  .countryInfo{
+    flex-direction: row; /* row for small screens */
+    align-items: stretch;
+    justify-content: center;
   }
 }
