@@ -23,8 +23,20 @@ body{
   line-height: 1.3;
   gap: 1.5em;
 }
-.footer img{
+.footer img,
+.footer-logo {
   border-radius: 50%;
+  transition: opacity 0.35s cubic-bezier(.4,0,.2,1), transform 0.35s cubic-bezier(.4,0,.2,1);
+  opacity: 1;
+  transform: scale(1);
+}
+.footer-logo.fade-in {
+  opacity: 1;
+  transform: scale(1);
+}
+.footer-logo.fade-out {
+  opacity: 0;
+  transform: scale(0.92);
 }
 .social-links {
   display: flex;
