@@ -1,4 +1,4 @@
-import {useState, useEffect, React} from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css'
 import { RiLightbulbFlashLine } from "react-icons/ri";
@@ -62,69 +62,28 @@ const SearchField = ({countries,setSelectedCountry,search,setSearch}) =>{
 
 }
 const Details = ({icon,title, info}) => (
-  <div style={{
-    display: 'flex',
-    alignItems: 'flex-start',
-    gap: '0.7em',
-    marginBottom: '0.3em',
-    fontSize: '1.12rem',
-    lineHeight: 1.6,
-    color: 'var(--theme-color-2)'
-  }}>
-    <span style={{
-      fontSize: '1.35em',
-      marginRight: '0.3em',
-      color: 'var(--theme-color-3)',
-      flexShrink: 0
-    }}>{icon}</span>
-    <span style={{
-      fontWeight: 700,
-      marginRight: '0.3em',
-      color: 'var(--theme-color-1)'
-    }}><u>{title}</u>:</span>
-    <span style={{flex: 1, display: 'inline-block'}}>{info}</span>
+  <div className="details-row">
+    <span className="details-icon">{icon}</span>
+    <span className="details-title"><u>{title}</u>:</span>
+    <span className="details-info">{info}</span>
   </div>
 )
+
 const CollapsibleSection = ({icon, title, children, defaultOpen = false}) => {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div style={{marginBottom: '0.3em'}}>
+    <div className="collapsible-section">
       <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          cursor: 'pointer',
-          userSelect: 'none',
-          color: 'var(--theme-color-2)',
-          fontSize: '1.12rem',
-          gap: '0.7em'
-        }}
+        className="collapsible-header"
         onClick={() => setOpen(o => !o)}
         aria-expanded={open}
       >
-        <span style={{
-          fontSize: '1.35em',
-          marginRight: '0.3em',
-          color: 'var(--theme-color-3)',
-          flexShrink: 0
-        }}>{icon}</span>
-        <span style={{
-          fontWeight: 700,
-          marginRight: '0.3em',
-          color: 'var(--theme-color-1)'
-        }}>
-          <u>{title}</u>:
-        </span>
-        <span style={{
-          marginLeft: 'auto',
-          fontSize: '1.1em',
-          color: 'var(--theme-color-3)'
-        }}>
-          {open ? '▼' : '▶'}
-        </span>
+        <span className="details-icon">{icon}</span>
+        <span className="details-title"><u>{title}</u>:</span>
+        <span className="collapsible-arrow">{open ? '▼' : '▶'}</span>
       </div>
       {open && (
-        <div style={{marginLeft: '2.5em', marginTop: '0.2em'}}>
+        <div className="collapsible-content">
           {children}
         </div>
       )}
@@ -174,19 +133,10 @@ return(
       <div id="countryName">
         <h1>
           {country.name.common}
-          <span style={{
-            fontSize: '2.3rem',
-            marginLeft: '0.4rem',
-            filter: 'drop-shadow(0 2px 8px var(--theme-color-3))'
-          }}>{country.flag}</span>
+          <span className="country-flag-emoji">{country.flag}</span>
           <img id="coatOfArms" src={country.coatOfArms.png} alt="" />
         </h1>
-        <p style={{
-          color: 'var(--theme-color-2)',
-          fontWeight: 600,
-          fontSize: '1.1rem',
-          margin: '0.5em 0 1.1em 0'
-        }}><b>{country.name.official}</b></p>
+        <p className="country-official"><b>{country.name.official}</b></p>
         <Details icon={<MdStars/>} title={"Capital"} info={city}/>
         <Details icon={<TbWorldCog />} title={"Native Name"} info={nativeName}/>
       </div>
@@ -194,39 +144,12 @@ return(
     <div className="countryDetail">
       <h1><RiLightbulbFlashLine/> Insights</h1>
       <Details icon={<GiWorld/>} title={"Region"} info={`${country.region} | ${country.subregion}`}/>
-      <div style={{
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: '0.7em',
-        marginBottom: '0.3em',
-        fontSize: '1.12rem',
-        color: 'var(--theme-color-2)'
-      }}>
-        <span style={{
-          fontSize: '1.35em',
-          marginRight: '0.3em',
-          color: 'var(--theme-color-3)',
-          flexShrink: 0
-        }}><BsCurrencyExchange/></span>
-        <span style={{
-          fontWeight: 700,
-          marginRight: '0.3em',
-          color: 'var(--theme-color-1)'
-        }}><u>Currency</u>:</span>
-        <span style={{flex: 1, display: 'inline-block'}}>
+      <div className="details-row">
+        <span className="details-icon"><BsCurrencyExchange/></span>
+        <span className="details-title"><u>Currency</u>:</span>
+        <span className="details-info">
           {Object.keys(currencies).map(
-            key => <span key={key} style={{
-              background: 'var(--theme-color-4)',
-              borderRadius: '10px',
-              padding: '0.18em 0.8em',
-              marginRight: '0.5em',
-              fontSize: '1em',
-              display: 'inline-block',
-              color: 'var(--theme-color-3)',
-              border: '1.5px solid var(--theme-color-3)',
-              fontWeight: 600,
-              boxShadow: '0 1px 6px 0 var(--theme-color-5)'
-            }}>
+            key => <span key={key} className="currency-badge">
               {currencies[key].name} ({currencies[key].symbol || ""})
             </span>
           )}
@@ -236,24 +159,11 @@ return(
       <Details icon={<GiFlatPlatform/>} title={"Area"} info = {area}/>
       <Details icon={<MdNaturePeople/>} title={"Population Density"} info = {popDen}/>
       <CollapsibleSection icon={<BsClockFill/>} title="Time Zones" defaultOpen={false}>
-        <ul style={{
-          margin: 0,
-          padding: 0,
-          listStyle: 'none',
-          fontSize: '1em'
-        }}>
+        <ul className="collapsible-list">
           {country.timezones && country.timezones.length > 0
             ? country.timezones.map((tz, idx) =>
-              <li key={tz} style={{
-                display: 'flex',
-                alignItems: 'center',
-                marginBottom: '0.15em'
-              }}>
-                <span style={{
-                  color: 'var(--theme-color-3)',
-                  marginRight: '0.5em',
-                  fontSize: '1.1em'
-                }}>•</span>
+              <li key={tz} className="collapsible-list-item">
+                <span className="collapsible-bullet">•</span>
                 <span>{tz}</span>
               </li>
             )
@@ -262,24 +172,11 @@ return(
         </ul>
       </CollapsibleSection>
       <CollapsibleSection icon={<HiLanguage/>} title="Official Languages" defaultOpen={false}>
-        <ul style={{
-          margin: 0,
-          padding: 0,
-          listStyle: 'none',
-          fontSize: '1em'
-        }}>
+        <ul className="collapsible-list">
           {Object.keys(languages).length > 0
             ? Object.keys(languages).map(key =>
-              <li key={key} style={{
-                display: 'flex',
-                alignItems: 'center',
-                marginBottom: '0.15em'
-              }}>
-                <span style={{
-                  color: 'var(--theme-color-3)',
-                  marginRight: '0.5em',
-                  fontSize: '1.1em'
-                }}>•</span>
+              <li key={key} className="collapsible-list-item">
+                <span className="collapsible-bullet">•</span>
                 <span>{languages[key]}</span>
               </li>
             )
@@ -287,26 +184,10 @@ return(
           }
         </ul>
       </CollapsibleSection>
-      <div style={{
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: '0.7em',
-        marginBottom: '0.3em',
-        fontSize: '1.12rem',
-        color: 'var(--theme-color-2)'
-      }}>
-        <span style={{
-          fontSize: '1.35em',
-          marginRight: '0.3em',
-          color: 'var(--theme-color-3)',
-          flexShrink: 0
-        }}><FaMapMarkedAlt/></span>
-        <span style={{
-          fontWeight: 700,
-          marginRight: '0.3em',
-          color: 'var(--theme-color-1)'
-        }}><u>Maps</u>:</span>
-        <span style={{flex: 1, display: 'inline-block'}}>
+      <div className="details-row">
+        <span className="details-icon"><FaMapMarkedAlt/></span>
+        <span className="details-title"><u>Maps</u>:</span>
+        <span className="details-info">
           <a href={country.maps.googleMaps} target="_blank" rel="noopener noreferrer" className="map-link">Google Maps</a> | <a href={country.maps.openStreetMaps} target="_blank" rel="noopener noreferrer" className="map-link">Terrirory</a>
         </span>
       </div>
