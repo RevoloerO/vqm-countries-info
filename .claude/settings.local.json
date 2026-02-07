@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir:*)",
+      "Bash(npx vite build)",
+      "Bash(timeout 8 npx vite:*)",
+      "Bash(timeout 6 npx vite:*)",
+      "Bash(curl:*)"
+    ]
+  }
+}
