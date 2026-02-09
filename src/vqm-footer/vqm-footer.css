@@ -8,7 +8,7 @@
   -webkit-backdrop-filter: blur(10px);
   color: white;
   text-align: center;
-  font-family: 'Share Tech Mono', monospace;
+  font-family: var(--font-mono, 'Share Tech Mono', monospace);
   padding: 10px 1rem 8px 1rem;
   display: flex;
   flex-direction: row;

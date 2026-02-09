@@ -46,7 +46,7 @@ const AnimatedCounter = ({ value, duration = 800, suffix = '' }) => {
     ? display.toLocaleString('en-US')
     : display;
 
-  return <span className="animated-counter">{formatted}{suffix}</span>;
+  return <span className="animated-counter mono">{formatted}{suffix}</span>;
 };
 
 export default AnimatedCounter;

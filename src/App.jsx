@@ -6,13 +6,13 @@ import SearchField from './components/SearchField';
 import CountryCard from './components/CountryCard';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorState from './components/ErrorState';
-import WelcomeState from './components/WelcomeState';
+import Dashboard from './components/Dashboard';
 import RegionFilter from './components/RegionFilter';
 import RecentlyViewed, { loadRecentlyViewed, saveRecentlyViewed } from './components/RecentlyViewed';
 import ComparePanel from './components/ComparePanel';
 import VqmFooter from './vqm-footer/vqm-footer';
 
-// ===== API CACHING (#28) =====
+// ===== API CACHING =====
 const CACHE_KEY = 'vqm-countries-cache';
 const CACHE_TTL = 1000 * 60 * 60; // 1 hour
 
@@ -45,29 +45,34 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Phase 5 state
+  // Dashboard state
+  const [viewMode, setViewMode] = useState('grid'); // 'grid' | 'detail'
+  const [visibleCount, setVisibleCount] = useState(24);
+
+  // Region + compare state
   const [activeRegion, setActiveRegion] = useState('all');
   const [recentList, setRecentList] = useState(loadRecentlyViewed);
   const [compareA, setCompareA] = useState(null);
   const [compareB, setCompareB] = useState(null);
   const [showCompare, setShowCompare] = useState(false);
+  const [compareMode, setCompareMode] = useState(false);
 
   // Apply theme to <body> and background image
   useEffect(() => {
     document.body.classList.toggle('dark-theme', theme === 'dark');
     document.body.classList.toggle('light-theme', theme === 'light');
-    document.body.style.backgroundImage =
+    document.body.style.setProperty('--bg-image',
       theme === 'dark'
         ? "url('assets/world-bg-dark.png')"
-        : "url('assets/world-bg.png')";
+        : "url('assets/world-bg.png')"
+    );
   }, [theme]);
 
-  // Fetch countries data with caching (#28)
+  // Fetch countries data with caching
   const fetchCountries = useCallback(() => {
     setLoading(true);
     setError(null);
 
-    // Try cache first
     const cached = getCachedCountries();
     if (cached) {
       setCountries(cached);
@@ -101,20 +106,34 @@ const App = () => {
 
   useEffect(fetchCountries, [fetchCountries]);
 
-  // Select country handler — saves to recently viewed (#22)
+  // Select country handler — saves to recently viewed, switches to detail view
   const handleSelectCountry = useCallback((country) => {
     setSelectedCountry(country);
+    setViewMode('detail');
     const updated = saveRecentlyViewed(country);
     setRecentList(updated);
   }, []);
 
-  // Compare mode handlers (#23)
+  // Back to grid view
+  const handleBackToGrid = useCallback(() => {
+    setSelectedCountry(null);
+    setViewMode('grid');
+  }, []);
+
+  // Reset visible count when region changes
+  useEffect(() => {
+    setVisibleCount(24);
+  }, [activeRegion]);
+
+  // Compare mode — from grid (shift+click) or header button
   const handleCompareSelect = useCallback((country) => {
     if (!compareA) {
       setCompareA(country);
+      setCompareMode(true);
     } else if (!compareB && country.name.official !== compareA.name.official) {
       setCompareB(country);
       setShowCompare(true);
+      setCompareMode(false);
     }
   }, [compareA, compareB]);
 
@@ -122,9 +141,22 @@ const App = () => {
     setCompareA(null);
     setCompareB(null);
     setShowCompare(false);
+    setCompareMode(false);
   }, []);
 
-  // Region-filtered countries for the search (#21)
+  const toggleCompareMode = useCallback(() => {
+    if (showCompare) {
+      clearCompare();
+    } else if (compareMode) {
+      clearCompare();
+    } else if (viewMode === 'detail' && selectedCountry) {
+      handleCompareSelect(selectedCountry);
+    } else {
+      setCompareMode(true);
+    }
+  }, [showCompare, compareMode, viewMode, selectedCountry, clearCompare, handleCompareSelect]);
+
+  // Region-filtered countries
   const filteredCountries = useMemo(() => {
     if (activeRegion === 'all') return countries;
     return countries.filter(c => c.region === activeRegion);
@@ -139,12 +171,45 @@ const App = () => {
     return counts;
   }, [countries]);
 
+  // Compare button label
+  const compareLabel = showCompare
+    ? '✕ Close'
+    : compareMode
+      ? compareA
+        ? `⚖️ ${compareA.name.common}...`
+        : '⚖️ Pick first...'
+      : '⚖️ Compare';
+
   // Determine what to show in the main content area
   const renderContent = () => {
     if (loading) return <LoadingSpinner />;
     if (error) return <ErrorState error={error} onRetry={fetchCountries} />;
-    if (!selectedCountry) return <WelcomeState />;
-    return <CountryCard countries={filteredCountries} selectedCountry={selectedCountry} />;
+
+    if (viewMode === 'detail' && selectedCountry) {
+      return (
+        <CountryCard
+          countries={filteredCountries}
+          selectedCountry={selectedCountry}
+          onBack={handleBackToGrid}
+        />
+      );
+    }
+
+    return (
+      <Dashboard
+        countries={filteredCountries}
+        allCountries={countries}
+        activeRegion={activeRegion}
+        onSelectCountry={handleSelectCountry}
+        visibleCount={visibleCount}
+        onShowMore={() => setVisibleCount(prev => prev + 24)}
+        onSelectRegion={setActiveRegion}
+        regionCounts={regionCounts}
+        compareMode={compareMode}
+        compareA={compareA}
+        onCompareSelect={handleCompareSelect}
+      />
+    );
   };
 
   return (
@@ -158,32 +223,22 @@ const App = () => {
             setSearch={setSearch}
           />
           <div className="header-actions">
-            {/* Compare toggle button */}
             <button
-              className={`compare-toggle-btn${compareA ? ' compare-active' : ''}`}
-              onClick={() => {
-                if (showCompare) {
-                  clearCompare();
-                } else if (selectedCountry) {
-                  if (!compareA) {
-                    handleCompareSelect(selectedCountry);
-                  } else if (!compareB) {
-                    handleCompareSelect(selectedCountry);
-                  }
-                }
-              }}
+              className={`compare-toggle-btn${compareMode || showCompare ? ' compare-active' : ''}`}
+              onClick={toggleCompareMode}
               aria-label={
                 showCompare ? 'Close comparison'
-                : compareA ? `Comparing ${compareA.name.common} — select another`
+                : compareMode ? 'Cancel compare mode'
                 : 'Compare countries'
               }
               title={
                 showCompare ? 'Close comparison'
-                : compareA ? `Comparing ${compareA.name.common} — select another country`
-                : 'Select a country then click to compare'
+                : compareMode
+                  ? compareA ? `Comparing ${compareA.name.common} — click another` : 'Click two countries to compare'
+                  : 'Click to enter compare mode, or shift+click grid cards'
               }
             >
-              {showCompare ? '✕ Close' : compareA ? `⚖️ ${compareA.name.common}...` : '⚖️ Compare'}
+              {compareLabel}
             </button>
             <ThemeToggle theme={theme} setTheme={setTheme} />
           </div>
