@@ -127,6 +127,40 @@ body::before {
   transition: opacity var(--transition-speed);
 }
 
+/* Flag-color ambient glow — decorative only, sits behind all content */
+body::after {
+  content: '';
+  position: fixed;
+  inset: -10%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.8s ease, background 0.8s ease;
+  background:
+    radial-gradient(ellipse 55% 45% at 12% 12%, var(--country-glow-a, transparent) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 55% at 88% 18%, var(--country-accent, transparent) 0%, transparent 60%),
+    radial-gradient(ellipse 65% 55% at 50% 88%, var(--country-glow-b, transparent) 0%, transparent 68%);
+}
+
+body.country-themed::after,
+body.compare-themed::after {
+  opacity: 0.55;
+  animation: auroraDrift 20s ease-in-out infinite;
+}
+
+body.compare-themed::after {
+  background:
+    radial-gradient(ellipse 55% 55% at 8% 15%, var(--countryA-glow-a, transparent) 0%, transparent 62%),
+    radial-gradient(ellipse 45% 50% at 92% 18%, var(--countryB-glow-a, transparent) 0%, transparent 62%),
+    radial-gradient(ellipse 70% 50% at 50% 88%, var(--countryA-accent, transparent) 0%, transparent 68%);
+}
+
+@keyframes auroraDrift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg) scale(1); }
+  33% { transform: translate(1.5%, -2%) rotate(1.5deg) scale(1.03); }
+  66% { transform: translate(-2%, 1.5%) rotate(-1.5deg) scale(1.02); }
+}
+
 /* Monospace utility for numeric data */
 .mono {
   font-family: var(--font-mono);
@@ -370,6 +404,26 @@ body::before {
               box-shadow var(--transition-speed), color var(--transition-speed);
 }
 
+/* Retint the detail card to the selected country's flag colors */
+body.country-themed .countryShow {
+  --country-detail-h1: var(--country-accent);
+  --theme-color-3: var(--country-accent);
+  --accent-gradient: linear-gradient(135deg, var(--country-accent), var(--country-glow-b));
+  background: linear-gradient(160deg,
+    color-mix(in srgb, var(--country-glow-a) 22%, var(--glass-bg)) 0%,
+    color-mix(in srgb, var(--country-glow-b) 16%, var(--glass-bg)) 100%);
+  border-color: color-mix(in srgb, var(--country-accent) 45%, var(--glass-border));
+  box-shadow: var(--shadow-md), 0 0 32px -8px var(--country-accent);
+}
+
+body.country-themed .countryDetail {
+  background: color-mix(in srgb, var(--country-glow-a) 16%, var(--info-board-glow));
+}
+
+body.country-themed .flag-container {
+  background: color-mix(in srgb, var(--country-glow-a) 25%, var(--bg-color-2));
+}
+
 /* ===== COUNTRY TRANSITION ANIMATION ===== */
 .country-transition {
   animation: countryFadeIn 0.35s ease-out;
@@ -425,7 +479,7 @@ body::before {
   aspect-ratio: 3 / 2;
   border-radius: var(--radius-md);
   overflow: hidden;
-  background: #f8fafc;
+  background: var(--bg-color-2);
   border: 2px solid var(--glass-border);
   box-shadow: var(--shadow-md);
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color var(--transition-speed);
@@ -524,7 +578,7 @@ body::before {
 .countryDetail {
   flex: 1;
   min-width: 220px;
-  background: rgba(99, 102, 241, 0.04);
+  background: var(--info-board-glow);
   color: var(--theme-color-2);
   padding: 0.85rem 0.75rem;
   border-radius: var(--radius-md);
@@ -666,6 +720,99 @@ body::before {
 }
 
 .map-separator { color: var(--placeholder-color); opacity: 0.4; }
+
+/* ===== RANDOM DISCOVERY PANEL ===== */
+.random-discovery {
+  max-width: 1100px;
+  margin: 1rem auto 0;
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius-lg);
+  background: var(--glass-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-sm);
+  transition: background var(--transition-speed), border-color var(--transition-speed);
+}
+
+body.country-themed .random-discovery {
+  border-color: color-mix(in srgb, var(--country-accent) 30%, var(--glass-border));
+}
+
+.random-discovery-title {
+  margin: 0 0 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--theme-color-2);
+  letter-spacing: 0.3px;
+}
+
+.random-discovery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.6rem;
+}
+
+.random-discovery-card {
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+  padding: 0.5rem 0.6rem;
+  background: var(--grid-card-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  color: var(--theme-color-2);
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s, background 0.2s;
+}
+
+.random-discovery-card:hover,
+.random-discovery-card:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--theme-color-3);
+  outline: none;
+}
+
+.random-discovery-flag {
+  width: 40px;
+  height: 28px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.random-discovery-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+  min-width: 0;
+}
+
+.random-discovery-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.random-discovery-capital {
+  font-size: 0.72rem;
+  color: var(--placeholder-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 599px) {
+  .random-discovery-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
 /* ===== COLLAPSIBLE SECTIONS ===== */
 .collapsible-section { margin-bottom: 0.2em; }
@@ -995,6 +1142,31 @@ body::before {
 .compare-flag {
   width: 32px; height: 22px; object-fit: cover;
   border-radius: 3px; border: 1px solid var(--glass-border);
+  transition: border-color var(--transition-speed);
+}
+
+/* Diagonal dual-tone split between the two compared countries' flag colors */
+body.compare-themed .compare-panel {
+  background:
+    linear-gradient(135deg,
+      color-mix(in srgb, var(--countryA-glow-a) 20%, var(--glass-bg)) 0%,
+      color-mix(in srgb, var(--countryA-glow-a) 20%, var(--glass-bg)) 47%,
+      color-mix(in srgb, var(--countryB-glow-a) 20%, var(--glass-bg)) 53%,
+      color-mix(in srgb, var(--countryB-glow-a) 20%, var(--glass-bg)) 100%);
+  --accent-gradient: linear-gradient(135deg, var(--countryA-accent), var(--countryB-accent));
+}
+
+body.compare-themed .compare-cell.compare-left .compare-flag {
+  border-color: var(--countryA-accent);
+}
+body.compare-themed .compare-cell.compare-right .compare-flag {
+  border-color: var(--countryB-accent);
+}
+body.compare-themed .compare-cell.compare-left.compare-winner {
+  color: var(--countryA-accent);
+}
+body.compare-themed .compare-cell.compare-right.compare-winner {
+  color: var(--countryB-accent);
 }
 
 /* ===== ANIMATED COUNTER ===== */

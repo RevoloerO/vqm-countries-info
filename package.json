@@ -10,7 +10,8 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "fetch:countries": "node scripts/fetch-countries.js"
   },
   "dependencies": {
     "gh-pages": "^6.3.0",

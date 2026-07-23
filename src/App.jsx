@@ -10,7 +10,9 @@ import Dashboard from './components/Dashboard';
 import RegionFilter from './components/RegionFilter';
 import RecentlyViewed, { loadRecentlyViewed, saveRecentlyViewed } from './components/RecentlyViewed';
 import ComparePanel from './components/ComparePanel';
+import RandomDiscovery from './components/RandomDiscovery';
 import VqmFooter from './vqm-footer/vqm-footer';
+import { pickCountryTheme, differentiateThemes } from './utils/flagTheme';
 
 const App = () => {
   const [countries, setCountries] = useState([]);
@@ -42,6 +44,43 @@ const App = () => {
         : "url('assets/world-bg.png')"
     );
   }, [theme]);
+
+  // Tint the page with the selected country's flag colors
+  useEffect(() => {
+    const body = document.body;
+    if (viewMode === 'detail' && selectedCountry) {
+      const { accent, glowA, glowB } = pickCountryTheme(selectedCountry.flagColors, theme);
+      body.style.setProperty('--country-accent', accent);
+      body.style.setProperty('--country-glow-a', glowA);
+      body.style.setProperty('--country-glow-b', glowB);
+      body.classList.add('country-themed');
+    } else {
+      body.classList.remove('country-themed');
+      body.style.removeProperty('--country-accent');
+      body.style.removeProperty('--country-glow-a');
+      body.style.removeProperty('--country-glow-b');
+    }
+  }, [selectedCountry, viewMode, theme]);
+
+  // Tint the comparison panel with both countries' flag colors
+  useEffect(() => {
+    const body = document.body;
+    if (showCompare && compareA && compareB) {
+      const themeA = pickCountryTheme(compareA.flagColors, theme);
+      const themeB = differentiateThemes(themeA, pickCountryTheme(compareB.flagColors, theme));
+      body.style.setProperty('--countryA-accent', themeA.accent);
+      body.style.setProperty('--countryA-glow-a', themeA.glowA);
+      body.style.setProperty('--countryB-accent', themeB.accent);
+      body.style.setProperty('--countryB-glow-a', themeB.glowA);
+      body.classList.add('compare-themed');
+    } else {
+      body.classList.remove('compare-themed');
+      body.style.removeProperty('--countryA-accent');
+      body.style.removeProperty('--countryA-glow-a');
+      body.style.removeProperty('--countryB-accent');
+      body.style.removeProperty('--countryB-glow-a');
+    }
+  }, [compareA, compareB, showCompare, theme]);
 
   // Load bundled countries dataset (sourced from REST Countries — see src/data/countries.json)
   const fetchCountries = useCallback(() => {
@@ -105,10 +144,22 @@ const App = () => {
       clearCompare();
     } else if (viewMode === 'detail' && selectedCountry) {
       handleCompareSelect(selectedCountry);
+      // Return to the grid so there's something to pick a second country from
+      setViewMode('grid');
     } else {
       setCompareMode(true);
     }
   }, [showCompare, compareMode, viewMode, selectedCountry, clearCompare, handleCompareSelect]);
+
+  // Routes a country pick from search/recently-viewed the same way grid
+  // cards do — into compare selection while compare mode is active
+  const handleCountryPick = useCallback((country) => {
+    if (compareMode) {
+      handleCompareSelect(country);
+    } else {
+      handleSelectCountry(country);
+    }
+  }, [compareMode, handleCompareSelect, handleSelectCountry]);
 
   // Region-filtered countries
   const filteredCountries = useMemo(() => {
@@ -142,7 +193,6 @@ const App = () => {
     if (viewMode === 'detail' && selectedCountry) {
       return (
         <CountryCard
-          countries={filteredCountries}
           selectedCountry={selectedCountry}
           onBack={handleBackToGrid}
         />
@@ -172,7 +222,7 @@ const App = () => {
         <div className="header-inner">
           <SearchField
             countries={filteredCountries}
-            setSelectedCountry={handleSelectCountry}
+            setSelectedCountry={handleCountryPick}
             search={search}
             setSearch={setSearch}
           />
@@ -214,7 +264,7 @@ const App = () => {
       {!loading && !error && recentList.length > 0 && (
         <RecentlyViewed
           recentList={recentList}
-          onSelect={handleSelectCountry}
+          onSelect={handleCountryPick}
           countries={countries}
         />
       )}
@@ -233,6 +283,14 @@ const App = () => {
         <div className="countryShow">
           {renderContent()}
         </div>
+
+        {!loading && !error && viewMode === 'detail' && selectedCountry && (
+          <RandomDiscovery
+            countries={countries}
+            currentCountry={selectedCountry}
+            onSelect={handleSelectCountry}
+          />
+        )}
       </main>
 
       <VqmFooter />

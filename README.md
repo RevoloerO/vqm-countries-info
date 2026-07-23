@@ -29,6 +29,8 @@ An interactive world countries explorer built with React and Vite. Browse 250+ c
 - Capital, region/subregion, population, area, languages, currencies, timezones
 - Google Maps and OpenStreetMap links
 - Sticky flag panel on desktop
+- **Dynamic flag-color theming** — background glow, accent color, and card border adapt to the selected country's flag palette (see [Theming](#theming))
+- **Discover More** — a panel below the detail view surfaces 3 random countries to jump to next
 
 ### Search & Filter
 - **Fuzzy search** with Levenshtein distance scoring
@@ -140,7 +142,12 @@ Country data comes from the [REST Countries API](https://restcountries.com) (v5)
 
 Instead, the dataset is fetched **once at development time** with an authenticated key and committed as a static file at [`src/data/countries.json`](src/data/countries.json), which the app imports directly at build time. There are no runtime API calls and no API key in the shipped app.
 
-To refresh the dataset later, re-run the fetch with your own REST Countries API key and overwrite `src/data/countries.json`, keeping the same shape (`name`, `flags`, `flag`, `capital`, `region`, `subregion`, `currencies`, `population`, `area`, `languages`, `timezones`, `maps`).
+To refresh the dataset later:
+```bash
+npm run fetch:countries -- --key=YOUR_API_KEY
+# or: RESTCOUNTRIES_API_KEY=YOUR_API_KEY npm run fetch:countries
+```
+This re-runs [`scripts/fetch-countries.js`](scripts/fetch-countries.js), which paginates the v5 API and overwrites `src/data/countries.json`.
 
 Note: the v5 API does not expose coat-of-arms artwork (a v3.1-only field), so that section of the country detail view no longer renders.
 
@@ -148,12 +155,20 @@ Note: the v5 API does not expose coat-of-arms artwork (a v3.1-only field), so th
 
 ## Theming
 
-The app uses CSS custom properties for theming. Two built-in themes:
+The app uses CSS custom properties for theming. Two base themes:
 
 - **Light** — Indigo/slate palette with glassmorphism backgrounds
 - **Dark** — Violet/periwinkle palette with deep slate backgrounds
 
 Toggle via the sun/moon button in the header. Theme preference is applied to `<body>` classes (`light-theme` / `dark-theme`).
+
+### Flag-color dynamic theming
+
+Selecting a country tints the page with colors derived from that country's flag: a soft ambient background glow, an accent color on headings/borders, and a glow around the detail card. In compare mode, the two selected countries get a diagonal dual-tone split across the comparison panel, a two-color "VS" badge, and per-side flag/border accents.
+
+The color source is REST Countries v5's own per-flag color analysis (`flagColors` in `src/data/countries.json` — dominant, prominent, and vibrant/muted/dark/light swatches). [`src/utils/flagTheme.js`](src/utils/flagTheme.js) picks the right swatches for the current light/dark mode, then **harmonizes** them: it synthesizes a second shade when a flag only has one or two real colors (e.g. Japan, Poland), boosts washed-out/gray colors to a minimum saturation, and nudges the accent away from the background glow when they'd otherwise be too similar — so every country produces a readable, cohesive theme regardless of its flag. In compare mode, if both countries land on near-identical colors, the second country's hue is rotated apart so the two sides stay visually distinguishable.
+
+Flag color always drives decorative layers only (background gradients, borders, badges) — body text stays on the existing theme's `--theme-color-2`, so contrast never depends on which country is selected.
 
 ---
 

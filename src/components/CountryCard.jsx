@@ -1,6 +1,6 @@
 import ShowCountry from './ShowCountry';
 
-const CountryCard = ({ countries, selectedCountry, onBack }) => {
+const CountryCard = ({ selectedCountry, onBack }) => {
   if (selectedCountry && selectedCountry.name) {
     return (
       <div className="country-transition" key={selectedCountry.name.official}>
