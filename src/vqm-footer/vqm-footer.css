@@ -64,6 +64,20 @@
   font-size: 0.9em;
 }
 
+.data-credit {
+  opacity: 0.7;
+  font-size: 0.85em;
+}
+
+.data-credit a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+.data-credit a:hover {
+  color: var(--theme-color-3, #ff3864);
+}
+
 /* Small screens */
 @media (max-width: 767px) {
   .footer {

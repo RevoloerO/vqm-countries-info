@@ -42,6 +42,9 @@ const VqmFooter = () => {
         />
       </a>
       <div className="brand">&copy;2025 Vuong Quyen Mai</div>
+      <div className="data-credit">
+        Data by <a href="https://restcountries.com" target="_blank" rel="noopener noreferrer">REST Countries</a>
+      </div>
       <div className="social-links">
         <a href="mailto:vuongquyenmai@gmail.com" aria-label="Gmail" target="_blank" rel="noopener noreferrer"><SiGmail /></a>
         <a href="https://www.linkedin.com/in/vuong-quyen-mai/" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><SiLinkedin /></a>

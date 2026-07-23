@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import axios from 'axios';
 import './App.css';
+import countriesData from './data/countries.json';
 import ThemeToggle from './components/ThemeToggle';
 import SearchField from './components/SearchField';
 import CountryCard from './components/CountryCard';
@@ -11,31 +11,6 @@ import RegionFilter from './components/RegionFilter';
 import RecentlyViewed, { loadRecentlyViewed, saveRecentlyViewed } from './components/RecentlyViewed';
 import ComparePanel from './components/ComparePanel';
 import VqmFooter from './vqm-footer/vqm-footer';
-
-// ===== API CACHING =====
-const CACHE_KEY = 'vqm-countries-cache';
-const CACHE_TTL = 1000 * 60 * 60; // 1 hour
-
-const getCachedCountries = () => {
-  try {
-    const cached = localStorage.getItem(CACHE_KEY);
-    if (!cached) return null;
-    const { data, timestamp } = JSON.parse(cached);
-    if (Date.now() - timestamp > CACHE_TTL) {
-      localStorage.removeItem(CACHE_KEY);
-      return null;
-    }
-    return data;
-  } catch {
-    return null;
-  }
-};
-
-const setCachedCountries = (data) => {
-  try {
-    localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
-  } catch { /* localStorage full — silently ignore */ }
-};
 
 const App = () => {
   const [countries, setCountries] = useState([]);
@@ -68,40 +43,19 @@ const App = () => {
     );
   }, [theme]);
 
-  // Fetch countries data with caching
+  // Load bundled countries dataset (sourced from REST Countries — see src/data/countries.json)
   const fetchCountries = useCallback(() => {
     setLoading(true);
     setError(null);
 
-    const cached = getCachedCountries();
-    if (cached) {
-      setCountries(cached);
+    try {
+      setCountries(countriesData);
       setLoading(false);
-      return;
+    } catch (err) {
+      console.error('Failed to load country data:', err);
+      setError('Failed to load country data.');
+      setLoading(false);
     }
-
-    const url1 = 'https://restcountries.com/v3.1/all?fields=name,flags,coatOfArms,capital,region,subregion,currencies,population,area,languages';
-    const url2 = 'https://restcountries.com/v3.1/all?fields=name,flag,timezones,maps';
-
-    Promise.all([axios.get(url1), axios.get(url2)])
-      .then(([res1, res2]) => {
-        const data1 = res1.data;
-        const data2 = res2.data;
-        const map2 = {};
-        data2.forEach(c => { map2[c.name.official] = c; });
-        const merged = data1.map(c => {
-          const c2 = map2[c.name.official] || {};
-          return { ...c, flag: c2.flag, timezones: c2.timezones, maps: c2.maps };
-        });
-        setCountries(merged);
-        setCachedCountries(merged);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Failed to fetch countries:', err);
-        setError('Failed to load country data. Please check your internet connection.');
-        setLoading(false);
-      });
   }, []);
 
   useEffect(fetchCountries, [fetchCountries]);

@@ -43,7 +43,6 @@ An interactive world countries explorer built with React and Vite. Browse 250+ c
 ### Other
 - **Recently Viewed** — Persistent chip bar of last 6 viewed countries (localStorage)
 - **Light / Dark theme toggle** — Indigo/slate light mode, violet/periwinkle dark mode
-- **API response caching** — 1-hour localStorage cache to reduce API calls
 - **Animated number counters** with easeOutCubic easing
 - **Fully responsive** — Mobile, tablet, and desktop breakpoints
 - **Accessible** — ARIA labels, focus-visible outlines, keyboard navigation
@@ -56,8 +55,7 @@ An interactive world countries explorer built with React and Vite. Browse 250+ c
 |-------|------------|
 | Framework | React 18 |
 | Build Tool | Vite 6 |
-| HTTP Client | Axios |
-| Data Source | [REST Countries API v3.1](https://restcountries.com) |
+| Data Source | [REST Countries API v5](https://restcountries.com) (bundled locally, see below) |
 | Styling | CSS custom properties (no CSS-in-JS) |
 | Typography | Inter (sans-serif) + Share Tech Mono (numeric data) |
 | Deployment | GitHub Pages via `gh-pages` |
@@ -136,16 +134,15 @@ npm run deploy
 
 ---
 
-## API
+## Data Source
 
-The app fetches data from the [REST Countries API](https://restcountries.com/v3.1/all) using two parallel requests (to stay within the API's per-request field limit), then merges the results:
+Country data comes from the [REST Countries API](https://restcountries.com) (v5). REST Countries deprecated the old open `v3.1` endpoint and replaced it with `v5`, which requires an API key and caps the free tier at 500 requests/month — too tight and too sensitive (the key would be publicly visible in the client bundle) to call live from a static GitHub Pages site.
 
-| Request | Fields |
-|---------|--------|
-| 1 | name, flags, coatOfArms, capital, region, subregion, currencies, population, area, languages |
-| 2 | name, flag (emoji), timezones, maps |
+Instead, the dataset is fetched **once at development time** with an authenticated key and committed as a static file at [`src/data/countries.json`](src/data/countries.json), which the app imports directly at build time. There are no runtime API calls and no API key in the shipped app.
 
-Responses are cached in `localStorage` for 1 hour to minimize API calls.
+To refresh the dataset later, re-run the fetch with your own REST Countries API key and overwrite `src/data/countries.json`, keeping the same shape (`name`, `flags`, `flag`, `capital`, `region`, `subregion`, `currencies`, `population`, `area`, `languages`, `timezones`, `maps`).
+
+Note: the v5 API does not expose coat-of-arms artwork (a v3.1-only field), so that section of the country detail view no longer renders.
 
 ---
 
